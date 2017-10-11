@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_centerHorizontal="true"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="270dp">
+    <ImageView
+        android:id="@+id/id_image_item_home_list"
+        android:layout_centerHorizontal="true"
+        android:layout_width="match_parent"
+        android:layout_height="230dp"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/test1"
+        />
+
+    <TextView
+        android:id="@+id/id_text_name"
+        android:layout_below="@+id/id_image_item_home_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="3dp"
+        android:textSize="13sp"
+        android:textColor="@android:color/black"
+        android:text="时尚连衣裙"/>
+
+    <TextView
+        android:layout_below="@+id/id_text_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/holo_orange_light"
+        android:layout_centerInParent="true"
+        android:textSize="14sp"
+        android:text="¥800"
+        />
+</RelativeLayout>
