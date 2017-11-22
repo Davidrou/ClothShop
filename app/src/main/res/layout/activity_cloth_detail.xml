@@ -21,17 +21,36 @@
     <com.bigkoo.convenientbanner.ConvenientBanner
         android:id="@+id/banner_cloth_detail"
         android:layout_width="match_parent"
-        android:layout_height="300dp"/>
+        android:layout_height="350dp"/>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <TextView
+            android:layout_margin="5dp"
+            android:layout_below="@+id/text_cloth_name_detail_activity"
+            android:id="@+id/text_price_detail_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:textColor="@android:color/holo_orange_dark"
+            android:text="¥289"/>
+
+        <TextView
+            android:id="@+id/text_cloth_name_detail_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:text="价格:100"/>
-    </LinearLayout>
+            android:gravity="left"
+            android:textColor="@android:color/black"
+            android:text="2017秋冬新款女装加厚长袖连衣裙时尚套装两件套时髦气质潮"
+            android:textSize="15sp"
+            android:lines="2"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/text_price_detail_activity" />
+    </RelativeLayout>
     
     <WebView
         android:id="@+id/webview_detail_activity"
