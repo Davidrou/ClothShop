@@ -22,7 +22,11 @@ public class BaseFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(setFragmentViewId(), container, false);
         mView = view;
+        init();
         return view;
+    }
+
+    protected void init() {
     }
 
     protected int setFragmentViewId() {
