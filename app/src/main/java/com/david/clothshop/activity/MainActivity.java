@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.RadioGroup;
 
 import com.david.clothshop.Fragment.HomeFragment;
@@ -14,6 +15,11 @@ import com.david.clothshop.Fragment.ShoppingCartFragment;
 import com.david.clothshop.Fragment.UserServiceFragment;
 import com.david.clothshop.R;
 import com.david.clothshop.common.BaseActivity;
+import com.david.clothshop.net.Request.TestRequest;
+import com.david.clothshop.net.bean.GitHubRepo;
+
+import java.util.List;
+import java.util.concurrent.ThreadPoolExecutor;
 
 public class MainActivity extends FragmentActivity implements RadioGroup.OnCheckedChangeListener {
     private FragmentManager fragmentManager ;
@@ -26,6 +32,17 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
         upDateFragment(new HomeFragment());
         RadioGroup radioGroup = (RadioGroup) findViewById(R.id.id_button_group);
         radioGroup.setOnCheckedChangeListener(this);
+        Thread thread =new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                List<GitHubRepo> list = TestRequest.test("davidrou");
+                for(GitHubRepo repo : list){
+                    Log.d("LZW",repo.getName()+": "+repo.getId());
+                }
+            }
+        };
+        thread.start();
     }
 
     @Override

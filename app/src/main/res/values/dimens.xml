@@ -3,5 +3,6 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="buttonCornerSize">2.0dip</dimen>
+    <dimen name="normalButtonHeight">48.0dip</dimen>
 
 </resources>
