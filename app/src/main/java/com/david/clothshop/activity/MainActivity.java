@@ -15,8 +15,11 @@ import com.david.clothshop.Fragment.ShoppingCartFragment;
 import com.david.clothshop.Fragment.UserServiceFragment;
 import com.david.clothshop.R;
 import com.david.clothshop.common.BaseActivity;
+import com.david.clothshop.net.Request.GetListInHomeRequest;
 import com.david.clothshop.net.Request.TestRequest;
 import com.david.clothshop.net.bean.GitHubRepo;
+import com.david.clothshop.net.bean.GoodListInHome;
+import com.david.clothshop.net.bean.ResponseData;
 
 import java.util.List;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -36,10 +39,8 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
             @Override
             public void run() {
                 super.run();
-                List<GitHubRepo> list = TestRequest.test("davidrou");
-                for(GitHubRepo repo : list){
-                    Log.d("LZW",repo.getName()+": "+repo.getId());
-                }
+                ResponseData<GoodListInHome> goodListInHome = GetListInHomeRequest.request(1);
+                Log.d("LZW", "msg:"+ goodListInHome.getMsg()+ " code:"+goodListInHome.getCode() +"");
             }
         };
         thread.start();

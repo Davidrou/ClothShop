@@ -1,4 +1,4 @@
-package com.david.clothshop.net;
+package com.david.clothshop.net.service;
 
 import com.david.clothshop.net.bean.GitHubRepo;
 
