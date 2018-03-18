@@ -8,7 +8,7 @@ public class Config {
     /**
      * 本地服务器的地址
      */
-    public static final String SERVER_ADDRESS_BASE_LOCAL = "http://192.168.1.109:8082/sale/";
+    public static final String SERVER_ADDRESS_BASE_LOCAL = "http://39.106.49.139:8083/sale/";
 
     /**
      * 分页查询首页商品列表

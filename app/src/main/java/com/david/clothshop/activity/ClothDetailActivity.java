@@ -37,6 +37,7 @@ public class ClothDetailActivity extends Activity implements View.OnClickListene
     private ConvenientBanner mConvenientBanner;
     private ArrayList<Integer> localImages = new ArrayList<Integer>();
     private Button mBuyButton;
+    private static final String KEY_PRAMS_GOOD_ID = "key_prams_good_id";
 
     private int shopNum = 1;
     /**
@@ -104,9 +105,11 @@ public class ClothDetailActivity extends Activity implements View.OnClickListene
     private LinearLayout llBuyStages;
     private Button goInput;
     private List<String> tempImageColor;
+    private int goodId;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        goodId = getIntent().getIntExtra(KEY_PRAMS_GOOD_ID, 0);
         setContentView(R.layout.activity_cloth_detail);
         mWebView = (WebView) findViewById(R.id.webview_detail_activity);
         mBuyButton = (Button) findViewById(R.id.button_buy_now);
@@ -277,8 +280,9 @@ public class ClothDetailActivity extends Activity implements View.OnClickListene
         }
     }
 
-    public static void startActivity(Context context){
+    public static void startWithId(Context context, int id){
         Intent intent =new Intent(context,ClothDetailActivity.class);
+        intent.putExtra(KEY_PRAMS_GOOD_ID, id);
         context.startActivity(intent);
     }
 }
