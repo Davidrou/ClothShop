@@ -1,9 +1,70 @@
 package com.david.clothshop.net.bean;
 
-/**
- * Created by luxiaolin on 18/3/18.
- */
+
+import java.util.List;
 
 public class GoodDetailResponseBean {
+    public GoodDetail getGoodDetail() {
+        return goodDetail;
+    }
 
+    public void setGoodDetail(GoodDetail goodDetail) {
+        this.goodDetail = goodDetail;
+    }
+
+    private GoodDetail goodDetail;
+
+    public static class GoodDetail {
+        private int id;
+        private int menuId;
+        private String content;
+        private List<BannerItem> banner;
+        private String color;
+
+        public String getColor() {
+            return color;
+        }
+
+        public void setColor(String color) {
+            this.color = color;
+        }
+
+        public List<BannerItem> getBanner() {
+            return banner;
+        }
+
+        public void setBanner(List<BannerItem> banner) {
+            this.banner = banner;
+        }
+
+        public String getContent() {
+            return content;
+        }
+
+        public void setContent(String content) {
+            this.content = content;
+        }
+
+
+        public String getTitle() {
+            return title;
+        }
+
+        public void setTitle(String title) {
+            this.title = title;
+        }
+
+        private String title;
+    }
+
+    public static class BannerItem {
+        private int id;
+        private String value;
+    }
+
+    public static class ColorItem{
+        private String color;
+        private String name;
+        private boolean checked;
+    }
 }

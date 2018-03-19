@@ -15,4 +15,8 @@ public class Config {
      */
     public static final String GET_GOOD_LIST_IN_HOME = "good/list";
 
+    /**
+     * 商品详情
+     */
+    public static final String GET_GOOD_DETAIL = "good/get";
 }
