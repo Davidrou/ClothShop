@@ -4,10 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.PersistableBundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,6 +26,11 @@ import com.david.clothshop.customize.FlowTagLayout;
 import com.david.clothshop.customize.OnTagSelectListener;
 import com.david.clothshop.customize.TagInfo;
 import com.david.clothshop.dialog.GoodSelectDialog;
+import com.david.clothshop.net.Request.GetGoodDetailRequest;
+import com.david.clothshop.net.bean.GoodDetailResponseBean;
+import com.david.clothshop.net.bean.ResponseData;
+import com.david.clothshop.utils.ThreadPool;
+import com.facebook.drawee.view.SimpleDraweeView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,10 +43,12 @@ public class ClothDetailActivity extends Activity implements View.OnClickListene
 
     private WebView mWebView;
     private ConvenientBanner mConvenientBanner;
-    private ArrayList<Integer> localImages = new ArrayList<Integer>();
+    private ArrayList<String> mBannerImages = new ArrayList<String>();
     private Button mBuyButton;
     private static final String KEY_PRAMS_GOOD_ID = "key_prams_good_id";
-
+    private static final String TAG = "ClothDetailActivity";
+    private Handler mHandler = new Handler();
+    private  TextView mPriceTextView, mTitielTextView;
     private int shopNum = 1;
     /**
      * 颜色 内存 分期 数量
@@ -112,35 +122,73 @@ public class ClothDetailActivity extends Activity implements View.OnClickListene
         goodId = getIntent().getIntExtra(KEY_PRAMS_GOOD_ID, 0);
         setContentView(R.layout.activity_cloth_detail);
         mWebView = (WebView) findViewById(R.id.webview_detail_activity);
+        WebSettings webSettings = mWebView.getSettings();
+
+        //设置自适应屏幕，两者合用
         mBuyButton = (Button) findViewById(R.id.button_buy_now);
         mBuyButton.setOnClickListener(this);
         mConvenientBanner = (ConvenientBanner) findViewById(R.id.banner_cloth_detail);
+        mPriceTextView = (TextView) findViewById(R.id.text_price_detail_activity);
+        mTitielTextView = (TextView) findViewById(R.id.text_cloth_name_detail_activity);
         loadData();
     }
 
     private void loadData() {
-        localImages.add(R.drawable.test2);
-        localImages.add(R.drawable.test3);
-        localImages.add(R.mipmap.test1);
-        mConvenientBanner.setPages(new CBViewHolderCreator() {
+        ThreadPool.execute(new Runnable() {
             @Override
-            public Object createHolder() {
-                return new LocalImageHolderView();
-            }
-        }, localImages)
-                // /设置指示器是否可见
-                .setPointViewVisible(true)
-                //设置自动切换（同时设置了切换时间间隔）
-                .startTurning(1500)
-                //设置两个点图片作为翻页指示器，不设置则没有指示器，可以根据自己需求自行配合自己的指示器,不需要圆点指示器可用不设
-                .setPageIndicator(new int[]{R.mipmap.ic_page_indicator, R.mipmap.ic_page_indicator_focused})
-                //设置指示器的方向（左、中、右）
-                .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL);
-                //设置点击监听事件
+            public void run() {
+                ResponseData<GoodDetailResponseBean> responseData = GetGoodDetailRequest.request(goodId);
+                if(responseData==null || !"OK".equals(responseData.getCode())){
+                    Log.e(TAG, responseData==null?"responseBean is null":("Response Code : "+responseData.getCode()));
+                    return;
+                }
+                GoodDetailResponseBean responseBean =  responseData.getData();
+                GoodDetailResponseBean.GoodDetail goodDetail = responseBean.getGoodDetail();
+                if(goodDetail == null){
+                    Log.e(TAG, "goodDetail is null");
+                    return;
+                }
+                List<GoodDetailResponseBean.BannerItem> bannerItemList = goodDetail.getBanner();
+                for(GoodDetailResponseBean.BannerItem item: bannerItemList){
+                    mBannerImages.add(item.getValue());
+                }
+                final String title = goodDetail.getTitle();
+                final double price = goodDetail.getPrice();
+                final String detailHtml = goodDetail.getContent();
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        mWebView.loadDataWithBaseURL("http://39.106.49.139/",detailHtml,"text/html", "UTF -8", null);
+                        mTitielTextView.setText(title);
+                        mPriceTextView.setText("¥"+price);
+                        mConvenientBanner.setPages(new CBViewHolderCreator() {
+                            @Override
+                            public Object createHolder() {
+                                return new LocalImageHolderView();
+                            }
+                        }, mBannerImages)
+                                // /设置指示器是否可见
+                                .setPointViewVisible(true)
+                                //设置自动切换（同时设置了切换时间间隔）
+                                .startTurning(1500)
+                                //设置两个点图片作为翻页指示器，不设置则没有指示器，可以根据自己需求自行配合自己的指示器,不需要圆点指示器可用不设
+                                .setPageIndicator(new int[]{R.mipmap.ic_page_indicator, R.mipmap.ic_page_indicator_focused})
+                                //设置指示器的方向（左、中、右）
+                                .setPageIndicatorAlign(ConvenientBanner.PageIndicatorAlign.CENTER_HORIZONTAL);
+                        //设置点击监听事件
 //                .setOnItemClickListener(this)
-                //设置手动影响（设置了该项无法手动切换）
+                        //设置手动影响（设置了该项无法手动切换）
 //                .setManualPageable(true);
-        mWebView.loadUrl("http://www.jianshu.com/p/3c94ae673e2a");
+                    }
+                });
+            }
+        });
+
+
+
+
+
+        //mWebView.loadUrl("http://www.jianshu.com/p/3c94ae673e2a");
     }
 
     @Override
@@ -264,19 +312,19 @@ public class ClothDetailActivity extends Activity implements View.OnClickListene
     }
 
 
-    private class LocalImageHolderView implements Holder<Integer>{
-        private ImageView imageView;
+    private class LocalImageHolderView implements Holder<String>{
+        private SimpleDraweeView imageView;
 
         @Override
         public View createView(Context context) {
-            imageView = new ImageView(context);
+            imageView = new SimpleDraweeView(context);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             return imageView;
         }
 
         @Override
-        public void UpdateUI(Context context, int position, Integer data) {
-            imageView.setImageResource(data);
+        public void UpdateUI(Context context, int position, String data) {
+            imageView.setImageURI(data);
         }
     }
 

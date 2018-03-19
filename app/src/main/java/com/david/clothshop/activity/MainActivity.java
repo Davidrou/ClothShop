@@ -43,10 +43,7 @@ public class MainActivity extends FragmentActivity implements RadioGroup.OnCheck
                 super.run();
 //                ResponseData<GoodListInHome> goodListInHome = GetListInHomeRequest.request(1);
 //                Log.d("LZW", "msg:"+ goodListInHome.getMsg()+ " code:"+goodListInHome.getCode() +"");
-                ResponseData<GoodDetailResponseBean> responseData = GetGoodDetailRequest.request(1818);
-                Log.d("LZW", "msg:"+ responseData.getMsg()+ " code:"+responseData.getCode() +"");
-                GoodDetailResponseBean responseBean =  responseData.getData();
-                Log.d("LZW",responseBean.getGoodDetail().getContent());
+
             }
         };
         thread.start();

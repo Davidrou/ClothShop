@@ -20,6 +20,9 @@ public class GoodDetailResponseBean {
         private String content;
         private List<BannerItem> banner;
         private String color;
+        private String title;
+        private double price;
+
 
         public String getColor() {
             return color;
@@ -54,10 +57,21 @@ public class GoodDetailResponseBean {
             this.title = title;
         }
 
-        private String title;
+
+        public double getPrice() {
+            return price;
+        }
     }
 
     public static class BannerItem {
+        public int getId() {
+            return id;
+        }
+
+        public String getValue() {
+            return value;
+        }
+
         private int id;
         private String value;
     }
