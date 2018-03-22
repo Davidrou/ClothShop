@@ -31,8 +31,15 @@ import com.david.clothshop.net.bean.GoodDetailResponseBean;
 import com.david.clothshop.net.bean.ResponseData;
 import com.david.clothshop.utils.ThreadPool;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -92,9 +99,9 @@ public class ClothDetailActivity extends Activity implements View.OnClickListene
     private String strColor;
     private String strMemory;
     private String strVersion;
-    private List<TagInfo> mColors;
+    private List<TagInfo> mColors = new ArrayList<>();
     private List<String> mTempColors;
-    private List<TagInfo> mMonerys;
+    private List<TagInfo> mMonerys = new ArrayList<>();
     private List<String> mTempMonerys;
     private List<TagInfo> mStages;
     private List<String> mTempStages;
@@ -133,6 +140,12 @@ public class ClothDetailActivity extends Activity implements View.OnClickListene
         loadData();
     }
 
+    static class Color{
+        String color;
+        String name;
+        Boolean checked;
+    }
+
     private void loadData() {
         ThreadPool.execute(new Runnable() {
             @Override
@@ -155,6 +168,19 @@ public class ClothDetailActivity extends Activity implements View.OnClickListene
                 final String title = goodDetail.getTitle();
                 final double price = goodDetail.getPrice();
                 final String detailHtml = goodDetail.getContent();
+                String color = goodDetail.getColor();
+                Gson gson = new Gson();
+                List<Color> colorList = gson.fromJson(color, new TypeToken<List<Color>>(){}.getType());
+                for(Color colorItem : colorList){
+                    if(colorItem.checked){
+                        mColors.add(new TagInfo(colorItem.name));
+                    }
+                }
+                String size = goodDetail.getSize();
+                List<String> sizeList = gson.fromJson(size,new TypeToken<List<String>>(){}.getType());
+                for(String sizeItem : sizeList) {
+                    mMonerys.add(new TagInfo(sizeItem));
+                }
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -259,7 +285,7 @@ public class ClothDetailActivity extends Activity implements View.OnClickListene
         //--------------------------商品颜色
         //--------------------------内存列表
         rlShopMomery = (FlowTagLayout) contentView.findViewById(R.id.rl_shop_momery);
-        //initShopMomery();
+        initShopMomery();
         //--------------------------内存列表
 
         //-------------------------制式版本
@@ -283,13 +309,6 @@ public class ClothDetailActivity extends Activity implements View.OnClickListene
      * @hint
      */
     private void initShopColor() {
-        mColors = new ArrayList<>();
-        mColors.add(new TagInfo("红色"));
-        mColors.add(new TagInfo("奶白色"));
-        mColors.add(new TagInfo("黑色"));
-        mColors.add(new TagInfo("紫色色"));
-        mColors.add(new TagInfo("葱绿色"));
-        mColors.add(new TagInfo("红色"));
         for (TagInfo mColor : mColors) {
             //初始化所有的选项为未选择状态
             mColor.setSelect(false);
@@ -307,6 +326,33 @@ public class ClothDetailActivity extends Activity implements View.OnClickListene
                 strColor = mColors.get(colorPositon).getText();
                 // L.e("选中颜色：" + strColor);
                 tvColor.setText("\"" + strColor + "\"");
+            }
+        });
+    }
+
+    /**
+     * 初始化颜色
+     *
+     * @hint
+     */
+    private void initShopMomery() {
+        for (TagInfo memory : mMonerys) {
+            //初始化所有的选项为未选择状态
+            memory.setSelect(false);
+        }
+        tvMomey.setText("\"未选择尺寸\"");
+        mMonerys.get(momeryPositon).setSelect(true);
+        ProperyTagAdapter colorAdapter = new ProperyTagAdapter(getApplicationContext(), mMonerys);
+        rlShopMomery.setAdapter(colorAdapter);
+        colorAdapter.notifyDataSetChanged();
+        rlShopMomery.setTagCheckedMode(FlowTagLayout.FLOW_TAG_CHECKED_SINGLE);
+        rlShopMomery.setOnTagSelectListener(new OnTagSelectListener() {
+            @Override
+            public void onItemSelect(FlowTagLayout parent, List<Integer> selectedList) {
+                momeryPositon = selectedList.get(0);
+                strMemory = mMonerys.get(momeryPositon).getText();
+                // L.e("选中颜色：" + strColor);
+                tvMomey.setText("\"" + strMemory + "\"");
             }
         });
     }

@@ -23,6 +23,16 @@ public class GoodDetailResponseBean {
         private String title;
         private double price;
 
+        public String getSize() {
+            return size;
+        }
+
+        public void setSize(String size) {
+            this.size = size;
+        }
+
+        private String size;
+
 
         public String getColor() {
             return color;

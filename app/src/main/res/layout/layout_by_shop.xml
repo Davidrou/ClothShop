@@ -36,7 +36,6 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text=" ￥ 1999.9"
                         android:textColor="#f00"
                         android:textSize="18sp" />
 
@@ -51,7 +50,6 @@
                     android:textSize="16sp"
                     android:maxLines="3"
                     android:paddingRight="16dp"
-                    android:text="华为荣耀P8 "
                     android:textColor="#000" />
 
                 <LinearLayout
@@ -176,7 +174,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:text="机身颜色"
+                        android:text="颜色"
                         android:textSize="16sp"
                         android:textColor="#000" />
 
